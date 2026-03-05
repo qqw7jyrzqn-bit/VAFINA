@@ -1797,16 +1797,18 @@ def report_export_pdf(request):
 
     # Try to register a Cyrillic-capable font
     font_name = 'Helvetica'
-    for candidate in [
-        os.path.join(os.path.dirname(__file__), '..', 'static', 'fonts', 'DejaVuSans.ttf'),
-        'C:/Windows/Fonts/arial.ttf',
-        'C:/Windows/Fonts/Arial.ttf',
+    _fonts_dir = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'static', 'fonts'))
+    for _reg, _bold in [
+        (os.path.join(_fonts_dir, 'DejaVuSans.ttf'), os.path.join(_fonts_dir, 'DejaVuSans-Bold.ttf')),
+        ('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'),
+        ('C:/Windows/Fonts/arial.ttf', 'C:/Windows/Fonts/arial.ttf'),
+        ('C:/Windows/Fonts/Arial.ttf', 'C:/Windows/Fonts/Arial.ttf'),
     ]:
-        candidate = os.path.normpath(candidate)
-        if os.path.exists(candidate):
+        if os.path.exists(_reg):
             try:
-                pdfmetrics.registerFont(TTFont('CyrFont', candidate))
-                pdfmetrics.registerFont(TTFont('CyrFont-Bold', candidate))
+                pdfmetrics.registerFont(TTFont('CyrFont', _reg))
+                _b = _bold if os.path.exists(_bold) else _reg
+                pdfmetrics.registerFont(TTFont('CyrFont-Bold', _b))
                 font_name = 'CyrFont'
             except Exception:
                 pass
