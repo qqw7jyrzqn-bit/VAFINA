@@ -21,13 +21,7 @@ DEBUG = os.getenv('DEBUG', 'True') == 'True'
 # Получаем домен Railway из переменных окружения
 RAILWAY_DOMAIN = os.environ.get('RAILWAY_PUBLIC_DOMAIN', '') or os.environ.get('RAILWAY_STATIC_URL', '')
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '*'
-]
-if RAILWAY_DOMAIN:
-    ALLOWED_HOSTS.append(RAILWAY_DOMAIN)
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']
 
 # CSRF настройки
 CSRF_TRUSTED_ORIGINS = [
@@ -41,9 +35,13 @@ CSRF_TRUSTED_ORIGINS = [
 if RAILWAY_DOMAIN:
     CSRF_TRUSTED_ORIGINS.append(f'https://{RAILWAY_DOMAIN}')
 
-# Cookie security — только в production (HTTPS)
+# Railway использует reverse proxy — сообщаем Django что запросы идут по HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Cookie security
 CSRF_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SAMESITE = 'Lax'
 
