@@ -1,1 +1,1 @@
-web: python manage.py migrate --noinput && python manage.py init_production_db && gunicorn edms_pervy_kluch.wsgi:application --bind 0.0.0.0:$PORT --workers 2
+web: python manage.py migrate --noinput && python manage.py collectstatic --noinput && python manage.py init_production_db && gunicorn edms_pervy_kluch.wsgi:application --bind 0.0.0.0:$PORT --workers 2

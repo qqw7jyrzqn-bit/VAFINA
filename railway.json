@@ -1,0 +1,13 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "python manage.py migrate --noinput && python manage.py collectstatic --noinput && python manage.py init_production_db && gunicorn edms_pervy_kluch.wsgi:application --bind 0.0.0.0:$PORT --workers 2",
+    "healthcheckPath": "/accounts/login/",
+    "healthcheckTimeout": 300,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 3
+  }
+}

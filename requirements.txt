@@ -5,7 +5,9 @@ crispy-bootstrap5==2025.6
 weasyprint==63.1
 Pillow
 gunicorn
-whitenoise
+whitenoise[brotli]
 reportlab
 openpyxl
 python-docx
+psycopg2-binary
+dj-database-url
