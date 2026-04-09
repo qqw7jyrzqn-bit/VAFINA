@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: edms-pervy-kluch
+    runtime: python
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "python manage.py migrate --noinput && python manage.py init_production_db && gunicorn edms_pervy_kluch.wsgi:application --bind 0.0.0.0:$PORT --workers 2"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: edms-db
+          property: connectionString
+
+databases:
+  - name: edms-db
+    databaseName: edms
+    user: edms
+    plan: free
