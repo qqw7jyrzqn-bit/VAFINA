@@ -40,3 +40,4 @@ staticfiles/
 *.swo
 *~
 .DS_Store
+.vercel
