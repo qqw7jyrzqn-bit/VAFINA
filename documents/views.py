@@ -627,8 +627,23 @@ def create_from_template(request):
         # Получаем template_id из GET параметра если есть
         template_id = request.GET.get('template')
         form = DocumentFromTemplateForm(template_id=template_id)
-    
-    return render(request, 'documents/create_from_template.html', {'form': form})
+
+    # Если шаблон передан через GET — блокируем выбор
+    locked_template_id = None
+    locked_template_name = None
+    if request.method == 'GET' and request.GET.get('template'):
+        try:
+            _t = DocumentTemplate.objects.get(pk=request.GET['template'], is_active=True)
+            locked_template_id = _t.pk
+            locked_template_name = _t.name
+        except DocumentTemplate.DoesNotExist:
+            pass
+
+    return render(request, 'documents/create_from_template.html', {
+        'form': form,
+        'locked_template_id': locked_template_id,
+        'locked_template_name': locked_template_name,
+    })
 
 
 @login_required

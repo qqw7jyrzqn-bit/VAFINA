@@ -244,11 +244,21 @@
                             <i class="fas fa-layer-group" style="color:var(--primary-500,#6366f1);"></i>
                             Шаблон документа<span class="required-star">*</span>
                         </label>
+                        {% if locked_template_id %}
+                        <input type="hidden" name="template" value="{{ locked_template_id }}">
+                        <div class="form-select" style="background:#f1f5f9;cursor:not-allowed;color:#374151;display:flex;align-items:center;gap:0.5rem;">
+                            <i class="fas fa-lock" style="color:#9ca3af;font-size:0.85rem;"></i>
+                            {{ locked_template_name }}
+                        </div>
+                        {% else %}
                         {{ form.template }}
                         {% if form.template.errors %}
                         <span class="form-error"><i class="fas fa-exclamation-circle"></i>{{ form.template.errors.0 }}</span>
                         {% endif %}
-                        <span class="form-help">После выбора шаблона появятся поля для заполнения</span>
+                        {% endif %}
+                        <span class="form-help">
+                        {% if locked_template_id %}Шаблон выбран и зафиксирован{% else %}После выбора шаблона появятся поля для заполнения{% endif %}
+                        </span>
                     </div>
 
                     <div class="form-group">
